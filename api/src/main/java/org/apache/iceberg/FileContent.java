@@ -26,6 +26,8 @@ public enum FileContent {
   DATA_MANIFEST(3),
   DELETE_MANIFEST(4);
 
+  private static final FileContent[] VALUES = FileContent.values();
+
   private final int id;
 
   FileContent(int id) {
@@ -34,5 +36,9 @@ public enum FileContent {
 
   public int id() {
     return id;
+  }
+
+  public static FileContent fromId(int id) {
+    return VALUES[id];
   }
 }
