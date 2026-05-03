@@ -323,14 +323,18 @@ class RESTTableScan extends DataTableScan {
   }
 
   private static String failureMessage(String planId, ErrorResponse error) {
-    Preconditions.checkArgument(error != null, "Error must be present for failed status");
+    // If a FAILED response lacks the expected error payload, still return a useful error
+    // message instead of throwing.
+    String type = error != null ? error.type() : "unknown";
+    int code = error != null ? error.code() : 0;
+    String message = error != null ? error.message() : "unknown";
     return String.format(
         Locale.ROOT,
         "Remote scan planning failed for planId: %s: %s (code=%d): %s",
         planId,
-        error.type(),
-        error.code(),
-        error.message());
+        type,
+        code,
+        message);
   }
 
   private CloseableIterable<FileScanTask> scanTasksIterable(
